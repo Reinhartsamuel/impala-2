@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Impala - DeFi Simplified</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+      // CRITICAL: Polyfill process globally before any modules load
+      window.process = {
+        env: {
+          NODE_ENV: 'development',
+          PRIVY_APP_ID: 'cmk5ir5hx01o8l80cqjrkbnuu'
+        }
+      };
+    </script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              impala: {
+                50: '#fff7ed',
+                100: '#ffedd5',
+                200: '#fed7aa',
+                300: '#fdba74',
+                400: '#fb923c',
+                500: '#f97316',
+                600: '#ea580c',
+              },
+              stone: {
+                850: '#1c1917',
+              }
+            },
+            fontFamily: {
+              sans: ['Nunito', 'sans-serif'],
+              display: ['Fredoka', 'sans-serif'],
+            },
+            animation: {
+              'bounce-slight': 'bounce-slight 2s infinite',
+              'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              'bounce-slight': {
+                '0%, 100%': { transform: 'translateY(-50%) translateY(0)' },
+                '50%': { transform: 'translateY(-50%) translateY(-5px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        background-color: #fff7ed; /* impala-50 */
+      }
+      #root {
+        height: 100%;
+      }
+      /* Custom scrollbar for cleaner look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #fed7aa;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #fb923c;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "recharts": "https://esm.sh/recharts@2.12.0?external=react,react-dom",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react": "https://esm.sh/react@18.2.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
+    "@google/genai": "https://esm.sh/@google/genai@0.1.0",
+    "@privy-io/react-auth": "https://esm.sh/@privy-io/react-auth@1.59.4?external=react,react-dom",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
+</html>
