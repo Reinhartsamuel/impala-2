@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import Onboarding from './components/Onboarding';
 import Dashboard from './components/Dashboard';
+import ImpalaMascot from './components/ImpalaMascot';
 import { OnboardingData, RiskProfileType, UserProfile, PortfolioPosition } from './types';
 import { generateImpalaGreeting, getSmartTip } from './services/geminiService';
 
@@ -17,7 +18,7 @@ const DEFAULT_USER: UserProfile = {
 };
 
 const App: React.FC = () => {
-  const { ready, authenticated, user: privyUser, login } = usePrivy();
+  const { ready, authenticated, user: privyUser, login, logout } = usePrivy();
   const [user, setUser] = useState<UserProfile>(DEFAULT_USER);
   const [impalaMessage, setImpalaMessage] = useState("Let's get started!");
   const [positions, setPositions] = useState<PortfolioPosition[]>([]);
@@ -51,6 +52,13 @@ const App: React.FC = () => {
       name: "Future Whale"
     }));
     // View will automatically switch to 'dashboard' via useEffect
+  };
+
+  const handleLogout = () => {
+    logout();
+    setUser(DEFAULT_USER);
+    setPositions([]);
+    setView('login');
   };
 
   const handleDepositComplete = (amount: number) => {
@@ -104,9 +112,7 @@ const App: React.FC = () => {
         {view === 'login' && (
           <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center">
             <div className="mb-8 relative">
-              <div className="w-32 h-32 bg-gradient-to-br from-impala-200 to-impala-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-5xl">🦌</span>
-              </div>
+              <ImpalaMascot mood="happy" className="mx-auto mb-4" />
               <div className="absolute -right-8 bottom-0 animate-bounce-slight text-4xl">👇</div>
             </div>
 
@@ -146,6 +152,7 @@ const App: React.FC = () => {
                 onDeposit={handleInvest}
                 positions={positions}
                 onDepositComplete={handleDepositComplete}
+                onLogout={handleLogout}
              />
           </div>
         )}

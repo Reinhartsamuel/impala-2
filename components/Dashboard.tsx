@@ -15,10 +15,11 @@ interface DashboardProps {
   onDeposit: (vaultId: string, amount: number) => void;
   positions: PortfolioPosition[];
   onDepositComplete: (amount: number) => void;
+  onLogout?: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ user, impalaMessage, onUpdateUser, onDeposit, positions, onDepositComplete }) => {
-  const [activeTab, setActiveTab] = useState<'explore' | 'portfolio'>('explore');
+const Dashboard: React.FC<DashboardProps> = ({ user, impalaMessage, onUpdateUser, onDeposit, positions, onDepositComplete, onLogout }) => {
+  const [activeTab, setActiveTab] = useState<'explore' | 'portfolio' | 'account'>('explore');
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const [activeCategory, setActiveCategory] = useState<VaultCategory | 'All'>('All');
   const [showDepositGuide, setShowDepositGuide] = useState(false);
@@ -225,6 +226,14 @@ const Dashboard: React.FC<DashboardProps> = ({ user, impalaMessage, onUpdateUser
             My Portfolio
              {activeTab === 'portfolio' && <div className="absolute bottom-0 left-0 w-full h-1 bg-impala-500 rounded-t-full"></div>}
         </button>
+        <button
+             onClick={() => setActiveTab('account')}
+            className={`pb-3 px-2 font-bold transition-all relative
+            ${activeTab === 'account' ? 'text-impala-600' : 'text-stone-400 hover:text-stone-600'}`}
+        >
+            Account
+             {activeTab === 'account' && <div className="absolute bottom-0 left-0 w-full h-1 bg-impala-500 rounded-t-full"></div>}
+        </button>
         {showDepositGuide && (
           <div className="relative ml-auto">
             <button
@@ -369,6 +378,104 @@ const Dashboard: React.FC<DashboardProps> = ({ user, impalaMessage, onUpdateUser
             onDeposit={handleDeposit}
             userBalance={user.walletBalance}
         />
+      )}
+
+      {activeTab === 'account' && (
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-stone-100">
+          <h2 className="text-xl font-display font-bold text-stone-800 mb-6">Account Settings</h2>
+          
+          <div className="space-y-6">
+            {/* User Profile Section */}
+            <div className="bg-impala-50 rounded-2xl p-5 border border-impala-100">
+              <h3 className="font-bold text-impala-900 mb-3 flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-impala-400 to-impala-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">👤</span>
+                </div>
+                Profile Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-stone-500 mb-1">Name</p>
+                  <p className="font-medium text-stone-800">{user.name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-stone-500 mb-1">Risk Profile</p>
+                  <span className="px-3 py-1 bg-impala-100 text-impala-700 rounded-md text-sm font-bold uppercase">
+                    {user.riskProfile}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm text-stone-500 mb-1">Investor Level</p>
+                  <p className="font-medium text-stone-800">Level {Math.floor(user.xp / 100) + 1}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-stone-500 mb-1">Current Streak</p>
+                  <p className="font-medium text-stone-800 flex items-center gap-1">
+                    <Flame size={16} className="text-orange-500" />
+                    {user.streak} days
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Section */}
+            <div className="bg-gradient-to-r from-impala-50 to-orange-50 rounded-2xl p-5 border border-impala-200">
+              <h3 className="font-bold text-impala-900 mb-3 flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">📊</span>
+                </div>
+                Investment Stats
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <p className="text-sm text-stone-500 mb-1">Total XP</p>
+                  <p className="text-2xl font-bold text-impala-700">{user.xp}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-stone-500 mb-1">Quests Completed</p>
+                  <p className="text-2xl font-bold text-impala-700">{user.completedQuests.length}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-stone-500 mb-1">Wallet Balance</p>
+                  <p className="text-2xl font-bold text-impala-700">${user.walletBalance.toFixed(2)}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-stone-500 mb-1">Total Invested</p>
+                  <p className="text-2xl font-bold text-impala-700">${user.totalInvested.toFixed(2)}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Logout Section */}
+            <div className="bg-gradient-to-r from-stone-50 to-stone-100 rounded-2xl p-5 border border-stone-200">
+              <h3 className="font-bold text-stone-800 mb-4 flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-stone-400 to-stone-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">🔒</span>
+                </div>
+                Account Security
+              </h3>
+              <p className="text-sm text-stone-500 mb-4">
+                You are securely logged in via Privy. Your wallet and personal data are protected.
+              </p>
+              <button
+                onClick={() => {
+                  if (onLogout) {
+                    onLogout();
+                  }
+                }}
+                className="w-full py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-bold shadow-lg transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Logout
+              </button>
+              <p className="text-xs text-stone-400 mt-3 text-center">
+                You'll be redirected to the login screen
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
