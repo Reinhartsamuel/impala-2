@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import Onboarding from './components/Onboarding';
 import Dashboard from './components/Dashboard';
-import DepositFlow from './components/DepositFlow';
 import { OnboardingData, RiskProfileType, UserProfile, PortfolioPosition } from './types';
 import { generateImpalaGreeting, getSmartTip } from './services/geminiService';
 
@@ -18,25 +17,27 @@ const DEFAULT_USER: UserProfile = {
 };
 
 const App: React.FC = () => {
-  const { ready, authenticated, user: privyUser } = usePrivy();
+  const { ready, authenticated, user: privyUser, login } = usePrivy();
   const [user, setUser] = useState<UserProfile>(DEFAULT_USER);
   const [impalaMessage, setImpalaMessage] = useState("Let's get started!");
   const [positions, setPositions] = useState<PortfolioPosition[]>([]);
-  const [view, setView] = useState<'loading' | 'onboarding' | 'deposit' | 'dashboard'>('loading');
+  const [view, setView] = useState<'loading' | 'login' | 'onboarding' | 'dashboard'>('loading');
 
   // Initial State Management
   useEffect(() => {
     if (!ready) return;
 
-    if (!user.onboarded) {
+    if (!authenticated) {
+      // User is not authenticated - show login screen
+      setView('login');
+    } else if (!user.onboarded) {
+      // User is authenticated but not onboarded
       setView('onboarding');
-    } else if (user.onboarded && (!authenticated || user.walletBalance === 0)) {
-      // If onboarded but not logged in OR balance is 0, go to deposit flow
-      setView('deposit');
     } else {
+      // User is authenticated and onboarded
       setView('dashboard');
     }
-  }, [ready, authenticated, user.onboarded, user.walletBalance]);
+  }, [ready, authenticated, user.onboarded]);
 
   const handleOnboardingComplete = async (data: OnboardingData, riskProfile: RiskProfileType) => {
     // Generate AI greeting based on profile
@@ -49,7 +50,7 @@ const App: React.FC = () => {
       riskProfile: riskProfile,
       name: "Future Whale"
     }));
-    // View will automatically switch to 'deposit' via useEffect
+    // View will automatically switch to 'dashboard' via useEffect
   };
 
   const handleDepositComplete = (amount: number) => {
@@ -100,24 +101,51 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen font-sans text-stone-800 bg-impala-50 selection:bg-impala-200">
       <main className="max-w-4xl mx-auto min-h-screen flex flex-col">
+        {view === 'login' && (
+          <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+            <div className="mb-8 relative">
+              <div className="w-32 h-32 bg-gradient-to-br from-impala-200 to-impala-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-5xl">🦌</span>
+              </div>
+              <div className="absolute -right-8 bottom-0 animate-bounce-slight text-4xl">👇</div>
+            </div>
+
+            <h1 className="text-4xl font-display font-bold text-stone-800 mb-2">Welcome to Impala</h1>
+            <p className="text-stone-500 mb-8 text-lg">Your playful gateway to onchain wealth building</p>
+
+            <div className="max-w-md w-full">
+              <button
+                onClick={login}
+                className="w-full py-4 bg-impala-500 hover:bg-impala-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-impala-200 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 animate-pulse-fast mb-6"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                Connect with Privy
+              </button>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-stone-100">
+                <p className="text-sm text-stone-500 mb-4">Powered by Privy • Secure & Non-custodial</p>
+                <p className="text-xs text-stone-400">Login with email, Google, Twitter, or your wallet</p>
+                <p className="text-xs text-stone-400 mt-2">Default network: Mantle Sepolia</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {view === 'onboarding' && (
           <Onboarding onComplete={handleOnboardingComplete} />
-        )}
-        
-        {view === 'deposit' && (
-          <div className="flex-1 flex flex-col justify-center fade-in">
-             <DepositFlow onDepositComplete={handleDepositComplete} />
-          </div>
         )}
 
         {view === 'dashboard' && (
           <div className="p-4 sm:p-6 fade-in">
-             <Dashboard 
-                user={user} 
+             <Dashboard
+                user={user}
                 impalaMessage={impalaMessage}
                 onUpdateUser={(u) => setUser(prev => ({ ...prev, ...u }))}
                 onDeposit={handleInvest}
                 positions={positions}
+                onDepositComplete={handleDepositComplete}
              />
           </div>
         )}

@@ -25,14 +25,14 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onClose, onDeposit, us
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-stone-900/40 backdrop-blur-sm" onClick={onClose} />
-      
+
       <div className="relative bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="p-6 bg-stone-50 border-b border-stone-100 flex justify-between items-start">
           <div>
             <div className="flex items-center gap-2 mb-1">
                 <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider
-                    ${vault.riskLevel === 'Low' ? 'bg-green-100 text-green-700' : 
+                    ${vault.riskLevel === 'Low' ? 'bg-green-100 text-green-700' :
                       vault.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
                     {vault.riskLevel} Risk
                 </span>
@@ -89,21 +89,21 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vault, onClose, onDeposit, us
                 </div>
                 <div className="relative mb-4">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 font-bold">$</span>
-                    <input 
-                        type="number" 
+                    <input
+                        type="number"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         placeholder="0.00"
                         className="w-full pl-8 pr-4 py-3 bg-stone-50 rounded-xl font-bold text-xl text-stone-800 focus:outline-none focus:ring-2 focus:ring-impala-400"
                     />
-                     <button 
+                     <button
                         onClick={() => setAmount(userBalance.toString())}
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold bg-white px-2 py-1 rounded-lg border border-stone-200 text-impala-500 hover:bg-impala-50"
                     >
                         MAX
                     </button>
                 </div>
-                <button 
+                <button
                     onClick={handleDeposit}
                     disabled={!amount || Number(amount) <= 0 || Number(amount) > userBalance || isDepositing}
                     className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all

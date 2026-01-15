@@ -14,11 +14,11 @@ const ASSETS = [
 ];
 
 const CHAINS = [
-  { id: 'eth', name: 'Ethereum', type: 'evm' },
+  { id: 'mantle', name: 'Mantle Sepolia', type: 'evm' },
+  { id: 'btc', name: 'Bitcoin', type: 'btc' },
   { id: 'base', name: 'Base', type: 'evm' },
   { id: 'arb', name: 'Arbitrum', type: 'evm' },
   { id: 'sol', name: 'Solana', type: 'svm' },
-  { id: 'btc', name: 'Bitcoin', type: 'btc' }
 ];
 
 const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
@@ -61,19 +61,19 @@ const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-md mx-auto p-6 text-center">
         <div className="mb-8 relative">
-           <ImpalaMascot 
-             mood="excited" 
-             message="Let's create your secure vault! It's the first step to your empire." 
+           <ImpalaMascot
+             mood="excited"
+             message="Let's create your secure vault! It's the first step to your empire."
              className="scale-125 origin-bottom"
            />
            {/* Animated Pointer */}
            <div className="absolute -right-8 bottom-0 animate-bounce-slight text-4xl">👇</div>
         </div>
-        
+
         <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">Create Your Wallet</h2>
         <p className="text-stone-500 mb-8">Connect securely with social login or your existing wallet to start earning.</p>
 
-        <button 
+        <button
           onClick={login}
           className="w-full py-4 bg-impala-500 hover:bg-impala-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-impala-200 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 animate-pulse-fast"
         >
@@ -104,9 +104,9 @@ const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
       <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-impala-100">
         {/* Header */}
         <div className="bg-impala-50 p-6 border-b border-impala-100 text-center relative">
-          <ImpalaMascot 
-            mood="happy" 
-            message="Your vault is ready! Now, let's add some fuel." 
+          <ImpalaMascot
+            mood="happy"
+            message="Your vault is ready! Now, let's add some fuel."
             className="absolute -top-12 -left-4 w-20 h-20 sm:w-24 sm:h-24 hidden sm:block"
           />
           <h2 className="text-2xl font-display font-bold text-stone-800">Deposit Funds</h2>
@@ -123,8 +123,8 @@ const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
                   key={asset.symbol}
                   onClick={() => setSelectedAsset(asset)}
                   className={`p-3 rounded-xl border-2 flex flex-col items-center gap-1 transition-all
-                    ${selectedAsset.symbol === asset.symbol 
-                      ? 'border-impala-500 bg-impala-50 text-impala-700' 
+                    ${selectedAsset.symbol === asset.symbol
+                      ? 'border-impala-500 bg-impala-50 text-impala-700'
                       : 'border-stone-100 hover:border-impala-200 text-stone-600'}`}
                 >
                   <span className="text-2xl">{asset.icon}</span>
@@ -148,8 +148,8 @@ const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
                     key={chain.id}
                     onClick={() => setSelectedChain(chain)}
                     className={`px-4 py-2 rounded-xl border-2 font-bold text-sm whitespace-nowrap transition-all
-                      ${selectedChain.id === chain.id 
-                        ? 'border-impala-500 bg-impala-50 text-impala-700' 
+                      ${selectedChain.id === chain.id
+                        ? 'border-impala-500 bg-impala-50 text-impala-700'
                         : 'border-stone-100 hover:border-impala-200 text-stone-600'}`}
                   >
                     {chain.name}
@@ -168,8 +168,8 @@ const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
              <div className="font-mono text-sm sm:text-lg break-all text-stone-700 mb-4 font-bold bg-white p-3 rounded-lg border border-stone-100">
                {getAddress()}
              </div>
-             
-             <button 
+
+             <button
                onClick={() => handleCopy(getAddress())}
                className="inline-flex items-center gap-2 text-impala-600 font-bold hover:text-impala-700 transition-colors"
              >
@@ -183,7 +183,7 @@ const DepositFlow: React.FC<DepositFlowProps> = ({ onDepositComplete }) => {
           </div>
 
           {/* Action */}
-          <button 
+          <button
             onClick={handleVerify}
             className="w-full py-4 bg-impala-500 hover:bg-impala-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-impala-200 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2"
           >

@@ -73,10 +73,10 @@ const ImpalaMascot: React.FC<ImpalaMascotProps> = ({ message, mood = 'happy', on
     <div className={`relative flex items-end ${className}`} onClick={onClick}>
       {/* Chat Bubble */}
       {displayedMessage && (
-        <div className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 sm:w-64 z-20 animate-bounce-slight">
+        <div className="absolute bottom-full left-0 mb-2 w-48 sm:w-64 z-20 animate-bounce-slight sm:left-1/2 sm:-translate-x-1/2">
           <div className="bg-white rounded-2xl p-4 shadow-xl border-2 border-impala-100 text-stone-800 text-sm font-medium relative">
              <p className="leading-relaxed font-display">{displayedMessage}</p>
-             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-b-2 border-r-2 border-impala-100 transform rotate-45"></div>
+             <div className="absolute -bottom-2 left-6 w-4 h-4 bg-white border-b-2 border-r-2 border-impala-100 transform rotate-45 sm:left-1/2 sm:-translate-x-1/2"></div>
           </div>
         </div>
       )}

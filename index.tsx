@@ -8,10 +8,27 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-// Safely get env var or fallback
-const privyAppId = (typeof process !== 'undefined' && process.env?.PRIVY_APP_ID) 
-  ? process.env.PRIVY_APP_ID 
-  : "cmk5ir5hx01o8l80cqjrkbnuu";
+// Use Vite environment variable for Privy App ID
+const privyAppId = import.meta.env.VITE_PRIVY_APP_ID || "cmk5ir5hx01o8l80cqjrkbnuu";
+
+// Mantle Sepolia network configuration
+const mantleSepolia = {
+  id: 5003,
+  name: 'Mantle Sepolia',
+  rpcUrls: {
+    default: { http: ['https://rpc.sepolia.mantle.xyz'] },
+    public: { http: ['https://rpc.sepolia.mantle.xyz'] }
+  },
+  nativeCurrency: {
+    name: 'Mantle',
+    symbol: 'MNT',
+    decimals: 18
+  },
+  blockExplorers: {
+    default: { name: 'Mantle Sepolia Explorer', url: 'https://explorer.sepolia.mantle.xyz' }
+  },
+  testnet: true
+};
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
@@ -26,6 +43,10 @@ root.render(
           logo: 'https://cdn-icons-png.flaticon.com/512/3069/3069172.png',
           showWalletLoginFirst: true,
         },
+        // Configure supported networks including Mantle Sepolia
+        supportedChains: [mantleSepolia],
+        // Set default chain to Mantle Sepolia
+        defaultChain: mantleSepolia,
       }}
     >
       <App />

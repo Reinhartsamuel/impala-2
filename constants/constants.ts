@@ -1,4 +1,4 @@
-import { RiskProfileType, Vault, VaultCategory, Quest } from './types';
+import { RiskProfileType, Vault, VaultCategory, Quest } from '../types';
 
 export const VAULTS: Vault[] = [
   {

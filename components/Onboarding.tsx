@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { ONBOARDING_STEPS } from '../constants';
+import { ONBOARDING_STEPS } from '../constants/constants.ts';
 import { OnboardingData, RiskProfileType } from '../types';
 import ImpalaMascot from './ImpalaMascot';
 
@@ -81,17 +81,17 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 max-w-2xl mx-auto">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 max-w-2xl mx-auto pt-8 pb-12">
       {/* Progress Bar */}
       <div className="w-full h-2 bg-impala-200 rounded-full mb-8 relative">
-        <div 
+        <div
           className="h-full bg-impala-500 rounded-full transition-all duration-500 ease-out"
           style={{ width: `${((stepIndex + 1) / ONBOARDING_STEPS.length) * 100}%` }}
         />
       </div>
 
       <div className="w-full bg-white rounded-3xl shadow-xl p-6 sm:p-10 relative overflow-hidden border border-impala-100">
-        
+
         {/* Header */}
         <div className="mb-8">
            <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{currentStep.question}</h2>
@@ -99,14 +99,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         </div>
 
         {/* Options */}
-        <div className="space-y-3 mb-8 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-3 mb-8 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
           {currentStep.options.map((opt) => (
             <button
               key={opt.label}
               onClick={() => handleSelect(opt.label, (opt as any).value)}
               className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-200 flex items-center justify-between group
                 ${isSelected(opt.label, (opt as any).value)
-                  ? 'border-impala-500 bg-impala-50' 
+                  ? 'border-impala-500 bg-impala-50'
                   : 'border-stone-100 hover:border-impala-300 hover:bg-stone-50'
                 }`}
             >
@@ -129,8 +129,8 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         </div>
 
         {/* Footer Nav */}
-        <div className="flex justify-between items-center pt-4 border-t border-stone-100">
-          <button 
+        <div className="flex justify-between items-center pt-6 pb-2 border-t border-stone-100">
+          <button
             onClick={handleBack}
             disabled={stepIndex === 0}
             className={`flex items-center gap-2 font-bold px-4 py-2 rounded-lg transition-colors
@@ -143,19 +143,19 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
             onClick={handleNext}
             disabled={!selectedValue}
             className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-lg transition-all transform hover:-translate-y-1
-              ${!selectedValue 
-                ? 'bg-stone-300 cursor-not-allowed shadow-none' 
+              ${!selectedValue
+                ? 'bg-stone-300 cursor-not-allowed shadow-none'
                 : 'bg-impala-500 hover:bg-impala-600 shadow-impala-200'}`}
           >
             {stepIndex === ONBOARDING_STEPS.length - 1 ? 'Finish' : 'Next'} <ArrowRight size={20} />
           </button>
         </div>
       </div>
-      
+
       {/* Helper Impala */}
-      <div className="mt-8 flex justify-center">
-         <ImpalaMascot 
-            mood="happy" 
+      <div className="mt-20 mb-4 flex justify-center">
+         <ImpalaMascot
+            mood="happy"
             message={!selectedValue ? "Take your time! No wrong answers here." : "Great choice! Moving right along."}
          />
       </div>
